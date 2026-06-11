@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NexTrade | Local Ecosystem Platform</title>
+    <style>
+        /* CSS: PPT के अनुसार Emerald & Dark Theme */
+        :root {
+            --bg: #0a0a0a;
+            --card-bg: #161616;
+            --emerald: #10b981;
+            --text-gray: #9ca3af;
+            --white: #f3f4f6;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--white);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            overflow-x: hidden;
+        }
+
+        /* Navbar */
+        .navbar {
+            background: rgba(20, 20, 20, 0.95);
+            padding: 15px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid var(--emerald);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo { font-size: 24px; font-weight: bold; color: var(--emerald); }
+        .nav-links button {
+            background: transparent;
+            color: var(--white);
+            border: none;
+            margin-left: 20px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+        .nav-links button.active { color: var(--emerald); border-bottom: 2px solid var(--emerald); }
+
+        /* Main Container */
+        .container { padding: 40px; max-width: 1200px; margin: auto; }
+
+        /* Module Sections (Tabs) */
+        .module-section { display: none; animation: fadeIn 0.5s; }
+        .module-section.active { display: block; }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        /* Registration & Forms */
+        .card {
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 15px;
+            border: 1px solid #333;
+            margin-bottom: 20px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            background: #222;
+            border: 1px solid #444;
+            color: white;
+            border-radius: 8px;
+        }
+
+        .btn-emerald {
+            background: var(--emerald);
+            color: black;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        /* Search Engine Module */
+        .search-box { display: flex; gap: 10px; margin-bottom: 30px; }
+        .location-badge { 
+            background: #1e293b; 
+            padding: 5px 15px; 
+            border-radius: 20px; 
+            font-size: 14px; 
+            color: var(--emerald);
+            display: inline-block;
+            margin-bottom: 15px;
+        }
+
+        /* Listing Grid */
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+        .biz-card {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 12px;
+            border-left: 4px solid var(--emerald);
+        }
+        .biz-card h3 { margin: 0; color: var(--emerald); }
+        .biz-card p { font-size: 14px; color: var(--text-gray); }
+        .verified-tag { background: #064e3b; color: #34d399; padding: 2px 8px; border-radius: 4px; font-size: 10px; }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="logo">NexTrade</div>
+        <div class="nav-links">
+            <button onclick="showModule('home')" class="active" id="btn-home">Home</button>
+            <button onclick="showModule('discovery')" id="btn-discovery">Discovery</button>
+            <button onclick="showModule('owner')" id="btn-owner">Owner Dashboard</button>
+            <button onclick="showModule('listing')" id="btn-listing">Listing Data</button>
+            <button onclick="showModule('auth')" id="btn-auth">Login/Register</button>
+        </div>
+    </nav>
+
+    <div class="container">
+        
+        <section id="home" class="module-section active">
+            <div class="location-badge" id="current-location">📍 Location: Detecting...</div>
+            <h1>Discover Local Ecosystem</h1>
+            <div class="search-box">
+                <input type="text" id="mainSearch" placeholder="Search for Electrician, Saloon, Groceries..." onkeyup="searchBiz()">
+                <select id="categorySelect" style="width: 200px;" onchange="searchBiz()">
+                    <option value="All">All Categories</option>
+                    <option value="Saloon">Saloon</option>
+                    <option value="Electrician">Electrician</option>
+                    <option value="Grocery">Grocery</option>
+                </select>
+            </div>
+            <div class="grid" id="discovery-results">
+                </div>
+        </section>
+
+        <section id="owner" class="module-section">
+            <h1>Owner Dashboard</h1>
+            <div class="card">
+                <h3>Register Your Business</h3>
+                <form id="ownerForm">
+                    <input type="text" id="bizName" placeholder="Business Name" required>
+                    <input type="text" id="bizCat" placeholder="Category (e.g. Saloon)" required>
+                    <input type="text" id="bizContact" placeholder="Contact Number" required>
+                    <input type="text" id="bizAddr" placeholder="Business Address" required>
+                    <button type="submit" class="btn-emerald">Add Business to Ecosystem</button>
+                </form>
+            </div>
+        </section>
+
+        <section id="listing" class="module-section">
+            <h1>Listing Module</h1>
+            <p style="color: var(--text-gray);">PPT Section: Verified Business Database</p>
+            <div class="card">
+                <table style="width:100%; text-align: left; border-collapse: collapse;">
+                    <thead>
+                        <tr style="border-bottom: 1px solid #333;">
+                            <th style="padding: 10px;">Store Name</th>
+                            <th>Category</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="listing-table-body">
+                        </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section id="auth" class="module-section">
+            <h1>User Registration</h1>
+            <div class="card" style="max-width: 500px; margin: auto;">
+                <h3>Create NexTrade Account</h3>
+                <form id="userRegForm">
+                    <input type="text" placeholder="Full Name" required>
+                    <input type="email" placeholder="Email Address" required>
+                    <input type="password" placeholder="Password" required>
+                    <select>
+                        <option>Register as Customer</option>
+                        <option>Register as Service Provider</option>
+                    </select>
+                    <button type="submit" class="btn-emerald">Join Ecosystem</button>
+                </form>
+            </div>
+        </section>
+
+    </div>
+
+    <script>
+        // Mock Data based on your Saloon/Electrician example
+        let businesses = [
+            { name: "City Saloon", cat: "Saloon", contact: "9826012345", verified: true, addr: "Adhartal, Jabalpur" },
+            { name: "Pro Electrician", cat: "Electrician", contact: "9977011223", verified: true, addr: "Vijay Nagar, Jabalpur" },
+            { name: "Healthy Groceries", cat: "Grocery", contact: "9425099887", verified: false, addr: "Civil Lines, Jabalpur" }
+        ];
+
+        // 1. Module Switching Logic (Tabs)
+        function showModule(moduleId) {
+            document.querySelectorAll('.module-section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.nav-links button').forEach(b => b.classList.remove('active'));
+            
+            document.getElementById(moduleId).classList.add('active');
+            document.getElementById('btn-' + moduleId).classList.add('active');
+        }
+
+        // 2. Search Engine Logic (PPT: Fast Discovery)
+        function searchBiz() {
+            const query = document.getElementById('mainSearch').value.toLowerCase();
+            const cat = document.getElementById('categorySelect').value;
+            const container = document.getElementById('discovery-results');
+
+            const filtered = businesses.filter(b => {
+                const matchesSearch = b.name.toLowerCase().includes(query) || b.cat.toLowerCase().includes(query);
+                const matchesCat = (cat === "All" || b.cat === cat);
+                return matchesSearch && matchesCat;
+            });
+
+            container.innerHTML = filtered.map(b => `
+                <div class="biz-card">
+                    <div style="display:flex; justify-content:space-between;">
+                        <h3>${b.name}</h3>
+                        ${b.verified ? '<span class="verified-tag">VERIFIED</span>' : ''}
+                    </div>
+                    <p><strong>${b.cat}</strong></p>
+                    <p>📍 ${b.addr}</p>
+                    <button class="btn-emerald" style="padding:5px 10px; font-size:12px;" onclick="alert('Calling ${b.name}...')">Call Now</button>
+                </div>
+            `).join('');
+        }
+
+        // 3. Owner Module Logic (Easy Store Registration)
+        document.getElementById('ownerForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const newBiz = {
+                name: document.getElementById('bizName').value,
+                cat: document.getElementById('bizCat').value,
+                contact: document.getElementById('bizContact').value,
+                addr: document.getElementById('bizAddr').value,
+                verified: false
+            };
+            businesses.push(newBiz);
+            alert(newBiz.name + " added successfully!");
+            e.target.reset();
+            updateListingTable();
+            searchBiz();
+        });
+
+        // 4. Listing Module Table
+        function updateListingTable() {
+            const tbody = document.getElementById('listing-table-body');
+            tbody.innerHTML = businesses.map(b => `
+                <tr style="border-bottom: 1px solid #222;">
+                    <td style="padding: 15px;">${b.name}</td>
+                    <td>${b.cat}</td>
+                    <td style="color: ${b.verified ? '#10b981' : '#f59e0b'}">${b.verified ? 'Verified' : 'Pending'}</td>
+                </tr>
+            `).join('');
+        }
+
+        // 5. Location Simulation (Requested)
+        function detectLocation() {
+            setTimeout(() => {
+                document.getElementById('current-location').innerText = "📍 Location: Jabalpur, MP (Detected)";
+            }, 2000);
+        }
+
+        // Initialize
+        window.onload = () => {
+            searchBiz();
+            updateListingTable();
+            detectLocation();
+        };
+
+    </script>
+</body>
+</html>

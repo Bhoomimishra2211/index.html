@@ -1,0 +1,15 @@
+<form id="regForm">
+    <input type="text" id="username" placeholder="Full Name" required>
+    <select id="role">
+        <option value="user">User</option>
+        <option value="business">Business Owner</option>
+    </select>
+    <button type="submit">Register</button>
+</form>
+
+<script>
+    document.getElementById('regForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        alert("Registration Successful! Welcome to NexTrade.");
+    });
+</script>
